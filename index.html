@@ -463,17 +463,22 @@ footer{position:relative;z-index:1;padding:24px 60px;display:flex;justify-conten
     for(let w=0;w<52;w++){const wk=[];for(let d=0;d<7;d++){const r=Math.random();let v=0;if(r>0.55){if(r>0.92)v=Math.floor(Math.random()*8)+8;else if(r>0.78)v=Math.floor(Math.random()*5)+4;else v=Math.floor(Math.random()*3)+1;}total+=v;wk.push({count:v,date:null});}weeks.push(wk);}
     render(weeks,total);
   }
-  fetch('https://api.github.com/users/jedco03/events/public?per_page=100')
-    .then(r=>{if(!r.ok)throw 0;return r.json();})
-    .then(events=>{
-      const map={};
-      events.forEach(e=>{const d=e.created_at?.slice(0,10);if(d)map[d]=(map[d]||0)+1;});
-      const today=new Date(),weeks=[];let total=0;
-      const start=new Date(today);start.setDate(start.getDate()-364-start.getDay());
-      for(let w=0;w<53;w++){const wk=[];for(let d=0;d<7;d++){const dt=new Date(start);dt.setDate(start.getDate()+w*7+d);if(dt>today)break;const key=dt.toISOString().slice(0,10);const count=map[key]||0;total+=count;wk.push({count,date:key});}if(wk.length)weeks.push(wk);}
-      if(total===0){fallback();return;}
-      render(weeks,total);
-    }).catch(fallback);
+  fetch('https://github-contributions-api.jogruber.de/v4/jedco03')
+    .then(r => { if (!r.ok) throw 0; return r.json(); })
+    .then(data => {
+      const weeks = data.contributions.map(week =>
+        week.map(day => ({
+          count: day.count,
+          date: day.date
+        }))
+      );
+
+      const total = data.total.lastYear;
+
+      if (!total) { fallback(); return; }
+      render(weeks, total);
+    })
+    .catch(fallback);
 })();
 
 /* ── SLIDESHOW ── */
