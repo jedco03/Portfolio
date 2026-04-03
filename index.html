@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Jeffrey Pascual — Backend Engineer</title>
+<meta name="description" content="Jeffrey Pascual — Backend Engineer based in Manila, PH. MERN stack, Django, PostgreSQL." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@400;700;800&family=Syne:wght@700&display=swap" rel="stylesheet" />
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--black:#111110;--white:#f5f2ec;--accent:#d0f044;--gray:#888883;--border:#111110;--mono:'Space Mono',monospace;--display:'Outfit',sans-serif;}
+html{scroll-behavior:smooth;}
+body{background:var(--white);color:var(--black);font-family:var(--mono);font-size:13px;line-height:1.6;overflow-x:hidden;}
+
+#wave-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.35;}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:16px 40px;background:rgba(245,242,236,0.92);backdrop-filter:blur(6px);border-bottom:1.5px solid var(--border);}
+.nav-logo{font-family:var(--display);font-weight:800;font-size:16px;letter-spacing:-0.5px;}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{text-decoration:none;color:var(--black);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;transition:color 0.2s;}
+.nav-links a:hover{color:var(--gray);}
+
+.hero{position:relative;z-index:1;margin-top:57px;border-bottom:1.5px solid var(--border);display:flex;flex-direction:column;}
+.hero-main{padding:80px 100px 60px;display:flex;flex-direction:column;align-items:center;text-align:center;background:rgba(245,242,236,0.82);border-bottom:1.5px solid var(--border);}
+.hero-tag{display:inline-block;font-size:10px;letter-spacing:2px;text-transform:uppercase;border:1.5px solid var(--border);padding:6px 12px;margin-bottom:48px;width:fit-content;}
+.hero-name{font-family:'Syne',sans-serif;font-weight:700;font-size:clamp(52px,7vw,96px);line-height:0.93;letter-spacing:-4px;}
+.hero-name span{display:block;color:var(--gray);}
+.hero-bio{margin-top:40px;max-width:680px;font-size:13px;line-height:1.9;color:#444441;}
+.hero-cta{display:inline-block;margin-top:40px;background:var(--black);color:var(--white);padding:14px 32px;font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;transition:background 0.2s,color 0.2s;border:1.5px solid var(--border);}
+.hero-cta:hover{background:var(--accent);color:var(--black);}
+.hero-stack{margin-top:48px;font-size:11px;color:var(--gray);letter-spacing:1px;}
+
+.hero-stats{display:grid;grid-template-columns:1fr 1fr;background:rgba(245,242,236,0.9);}
+.hero-stat{padding:20px 40px;display:flex;flex-direction:column;align-items:center;gap:16px;border-right:0.75px solid var(--border);}
+.hero-stat:last-child{border-right:none;}
+.stat-num{font-family:var(--display);font-weight:800;font-size:28px;letter-spacing:-1px;line-height:1;}
+.stat-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray);}
+
+section{position:relative;z-index:1;padding:80px 60px;border-bottom:1.5px solid var(--border);background:rgba(245,242,236,0.9);}
+.section-header{display:flex;align-items:baseline;gap:16px;margin-bottom:56px;}
+.section-num{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);}
+.section-title{font-family:var(--display);font-weight:800;font-size:36px;letter-spacing:-1.5px;}
+
+.about-grid{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--border);}
+.about-left{padding:48px;border-right:0.75px solid var(--border);}
+.about-right{padding:48px;}
+.about-text{font-size:14px;line-height:1.9;color:#333;}
+.about-list{list-style:none;display:flex;flex-direction:column;gap:12px;}
+.about-list li{display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:0.5px solid #ccc;font-size:12px;}
+.about-list li:last-child{border-bottom:none;}
+.about-list .lbl{color:var(--gray);letter-spacing:1px;text-transform:uppercase;font-size:10px;}
+.about-list .val{font-family:var(--display);font-weight:700;font-size:13px;}
+
+.skills-grid{display:grid;grid-template-columns:repeat(3,1fr);}
+.skill-cell{padding:28px 32px;border:0.75px solid var(--border);margin:-0.75px 0 0 -0.75px;transition:background 0.2s;}
+.skill-cell:hover{background:var(--accent);}
+.skill-name{font-family:var(--display);font-weight:700;font-size:16px;margin-bottom:6px;}
+.skill-type{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray);}
+
+.contrib-wrap{overflow-x:auto;padding-bottom:8px;}
+.contrib-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.contrib-count{font-family:var(--display);font-weight:700;font-size:18px;}
+.contrib-grid{display:flex;gap:3px;}
+.contrib-week{display:flex;flex-direction:column;gap:3px;}
+.contrib-cell{width:13px;height:13px;border-radius:2px;flex-shrink:0;}
+.contrib-cell:hover{outline:2px solid var(--black);}
+.contrib-months{display:flex;margin-bottom:6px;font-size:10px;color:var(--gray);letter-spacing:1px;}
+.contrib-legend{display:flex;align-items:center;gap:6px;margin-top:12px;font-size:10px;color:var(--gray);letter-spacing:1px;justify-content:flex-end;}
+.contrib-legend-cells{display:flex;gap:3px;}
+
+/* ── PROJECTS ── */
+.projects-grid{display:grid;grid-template-columns:repeat(2,1fr);}
+.project-card{border:0.75px solid var(--border);margin:-0.75px 0 0 -0.75px;overflow:hidden;}
+.project-info{padding:24px 28px;}
+.project-title{font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:-0.5px;margin-bottom:6px;}
+.project-desc{font-size:12px;color:#555;line-height:1.7;margin-bottom:16px;}
+.project-tags{display:flex;flex-wrap:wrap;gap:6px;}
+.tag{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;border:1px solid var(--border);padding:3px 8px;}
+.project-footer{display:flex;align-items:center;margin-top:16px;}
+.project-badge{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border:1px solid #ccc;color:var(--gray);}
+.project-link{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;background:var(--black);color:var(--white);padding:6px 14px;text-decoration:none;transition:background 0.2s,color 0.2s;}
+.project-link:hover{background:var(--accent);color:var(--black);}
+
+/* ── SLIDESHOW ── */
+.slideshow{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-bottom:0.75px solid var(--border);background:#e8e5de;}
+.slideshow img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.4s;}
+.slideshow img.active{opacity:1;}
+.slideshow-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray);}
+.slide-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(17,17,16,0.55);color:#fff;border:none;width:28px;height:28px;font-size:14px;cursor:pointer;z-index:2;display:flex;align-items:center;justify-content:center;transition:background 0.2s;}
+.slide-btn:hover{background:var(--black);}
+.slide-btn.prev{left:8px;}
+.slide-btn.next{right:8px;}
+.slide-dots{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:2;}
+.slide-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.5);border:none;cursor:pointer;padding:0;}
+.slide-dot.active{background:#fff;}
+
+/* ── CONTACT ── */
+.contact-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.contact-card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:24px 20px;display:flex;flex-direction:column;gap:12px;text-decoration:none;color:var(--black);transition:background 0.2s,transform 0.15s;}
+.contact-card:hover{background:var(--accent);}
+.contact-card:hover .contact-card-arrow{color:var(--black);}
+.contact-icon{width:40px;height:40px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.contact-card-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray);}
+.contact-card:hover .contact-card-label{color:#555;}
+.contact-card-val{font-size:13px;margin-top:4px;line-height:1.4;word-break:break-all;}
+.contact-card-arrow{margin-top:auto;font-size:12px;color:var(--gray);transition:color 0.2s;}
+
+.availability{display:flex;align-items:center;gap:10px;margin-top:24px;}
+.avail-text{font-size:11px;letter-spacing:1px;text-transform:uppercase;}
+.dot{width:8px;height:8px;border-radius:50%;background:#4caf50;animation:pulse 2s infinite;flex-shrink:0;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.6;transform:scale(1.3);}}
+
+footer{position:relative;z-index:1;padding:24px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--gray);letter-spacing:1px;background:rgba(245,242,236,0.95);border-top:1.5px solid var(--border);}
+
+@media(max-width:900px){
+  nav{padding:14px 24px;}
+  .hero-main{padding:48px 32px 40px;}
+  .hero-stat{padding:16px 24px;text-align:center;align-items:center;}
+  section{padding:60px 32px;}
+  .about-grid{grid-template-columns:1fr;}
+  .about-left{border-right:none;border-bottom:0.75px solid var(--border);padding:32px;}
+  .about-right{padding:32px;}
+  .skills-grid{grid-template-columns:repeat(2,1fr);}
+  .projects-grid{grid-template-columns:1fr;}
+  .contact-cards{grid-template-columns:1fr;}
+  footer{padding:20px 32px;flex-direction:column;gap:8px;text-align:center;}
+}
+@media(max-width:540px){
+  nav{padding:12px 16px;}
+  .nav-links{gap:12px;}
+  .nav-links a{font-size:9px;letter-spacing:1px;}
+  .hero-main{padding:36px 20px 32px;}
+  .hero-stat{padding:14px 20px;}
+  section{padding:48px 20px;}
+  .about-left,.about-right{padding:24px 20px;}
+  footer{padding:16px 20px;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="wave-canvas"></canvas>
+
+<nav>
+  <div class="nav-logo">JP_</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#github">GitHub</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="hero-main">
+    <div class="hero-tag">Backend Engineer — Manila, PH</div>
+    <h1 class="hero-name">Jeffrey<span>Pascual</span></h1>
+    <p class="hero-bio">Fresh grad. Full-stack capable. I architect robust backends and build things that actually ship — having worked with multiple clients through freelance engagements across web platforms.</p>
+    <a href="#contact" class="hero-cta">Let's work together →</a>
+    <div class="hero-stack">MERN · Django · PostgreSQL · C# · C++</div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="stat-num">5+</div>
+      <div class="stat-label">Freelance clients served</div>
+    </div>
+    <div class="hero-stat">
+      <div class="stat-num">8+</div>
+      <div class="stat-label">Technologies mastered</div>
+    </div>
+  </div>
+</div>
+
+<section id="about">
+  <div class="section-header">
+    <span class="section-num">01 /</span>
+    <h2 class="section-title">About</h2>
+  </div>
+  <div class="about-grid">
+    <div class="about-left">
+      <p class="about-text">I'm Jeffrey — a backend engineer fresh out of school but not short on experience. I've spent the last few years building real things for real clients through freelance work: billing systems, APIs, e-commerce backends, and web platforms.<br><br>I'm fluent in the MERN stack and comfortable in Python/Django land. I care about clean architecture, maintainable code, and understanding the problem before touching the keyboard.<br><br>Currently open to full-time opportunities and select freelance projects.</p>
+    </div>
+    <div class="about-right">
+      <ul class="about-list">
+        <li><span class="lbl">Role</span><span class="val">Frontend/Backend Engineer</span></li>
+        <li><span class="lbl">Email</span><span class="val">jedco04@gmail.com</span></li>
+        <li><span class="lbl">Location</span><span class="val">Marikina, Philippines</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="section-header">
+    <span class="section-num">02 /</span>
+    <h2 class="section-title">Skills</h2>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-cell"><div class="skill-name">Python</div><div class="skill-type">Language</div></div>
+    <div class="skill-cell"><div class="skill-name">Django</div><div class="skill-type">Backend Framework</div></div>
+    <div class="skill-cell"><div class="skill-name">Node.js</div><div class="skill-type">Runtime / Backend</div></div>
+    <div class="skill-cell"><div class="skill-name">React.js</div><div class="skill-type">Frontend Framework</div></div>
+    <div class="skill-cell"><div class="skill-name">JavaScript</div><div class="skill-type">Language</div></div>
+    <div class="skill-cell"><div class="skill-name">C# / C++</div><div class="skill-type">Language</div></div>
+    <div class="skill-cell"><div class="skill-name">PostgreSQL</div><div class="skill-type">Database</div></div>
+    <div class="skill-cell"><div class="skill-name">MongoDB</div><div class="skill-type">Database</div></div>
+    <div class="skill-cell"><div class="skill-name">MySQL</div><div class="skill-type">Database</div></div>
+  </div>
+</section>
+
+<section id="github">
+  <div class="section-header">
+    <span class="section-num">03 /</span>
+    <h2 class="section-title">GitHub Activity</h2>
+  </div>
+  <div style="border:1.5px solid var(--border);padding:32px 36px;">
+    <div class="contrib-header">
+      <div>
+        <div class="contrib-count" id="contrib-total">Loading contributions...</div>
+        <div style="font-size:11px;color:var(--gray);margin-top:4px;letter-spacing:1px;">github.com/jedco03</div>
+      </div>
+      <a href="https://github.com/jedco03" target="_blank" style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--black);text-decoration:none;border:1px solid var(--border);padding:8px 16px;transition:background 0.2s;" onmouseover="this.style.background='#d0f044'" onmouseout="this.style.background='transparent'">View profile →</a>
+    </div>
+    <div class="contrib-wrap">
+      <div id="contrib-months" class="contrib-months"></div>
+      <div class="contrib-grid" id="contrib-grid"></div>
+    </div>
+    <div class="contrib-legend">
+      <span>Less</span>
+      <div class="contrib-legend-cells" id="legend-cells"></div>
+      <span>More</span>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="section-header">
+    <span class="section-num">04 /</span>
+    <h2 class="section-title">Projects</h2>
+  </div>
+  <div class="projects-grid">
+
+    <!-- 1. SVMS -->
+    <div class="project-card">
+      <div class="slideshow" id="ss-svms">
+        <div class="slideshow-placeholder">Screenshots coming soon</div>
+        <img src="assets/svms-1.png" alt="SVMS screenshot 1" />
+        <img src="assets/svms-2.png" alt="SVMS screenshot 2" />
+        <img src="assets/svms-3.png" alt="SVMS screenshot 3" />
+        <img src="assets/svms-4.png" alt="SVMS screenshot 3" />
+        <img src="assets/svms-5.png" alt="SVMS screenshot 3" />
+        <button class="slide-btn prev" onclick="slide('svms',-1)">‹</button>
+        <button class="slide-btn next" onclick="slide('svms',1)">›</button>
+        <div class="slide-dots" id="dots-svms"></div>
+      </div>
+      <div class="project-info">
+        <div class="project-title">Student Violation Monitoring System</div>
+        <p class="project-desc">Thesis project — a full system for tracking and managing student violations, including a web platform and a Windows desktop application.</p>
+        <div class="project-tags">
+          <span class="tag">React</span><span class="tag">C#</span><span class="tag">MongoDB</span><span class="tag">WinForms</span>
+        </div>
+        <div class="project-footer">
+          <span class="project-badge">Thesis project</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. E-commerce -->
+    <div class="project-card">
+      <div class="slideshow" id="ss-ecom">
+        <div class="slideshow-placeholder">Screenshots coming soon</div>
+        <img src="assets/ecom.png" alt="E-commerce screenshot 1" />
+        <img src="assets/ecom1.jpg" alt="E-commerce screenshot 2" />
+        <button class="slide-btn prev" onclick="slide('ecom',-1)">‹</button>
+        <button class="slide-btn next" onclick="slide('ecom',1)">›</button>
+        <div class="slide-dots" id="dots-ecom"></div>
+      </div>
+      <div class="project-info">
+        <div class="project-title">E-commerce Platform</div>
+        <p class="project-desc">Full-stack e-commerce website built for a client — product listings, cart, and order management with a SQL database backend.</p>
+        <div class="project-tags">
+          <span class="tag">React</span><span class="tag">Node.js</span><span class="tag">MySQL</span>
+        </div>
+        <div class="project-footer">
+          <span class="project-badge">Client work</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Akimi Studio -->
+    <div class="project-card">
+      <div class="slideshow" id="ss-akimi">
+        <div class="slideshow-placeholder">Live site available</div>
+        <img src="assets/akimi-1.png" alt="Akimi Studio screenshot 1" />
+        <img src="assets/akimi-2.png" alt="Akimi Studio screenshot 2" />
+        <img src="assets/akimi-3.png" alt="Akimi Studio screenshot 2" />
+        <button class="slide-btn prev" onclick="slide('akimi',-1)">‹</button>
+        <button class="slide-btn next" onclick="slide('akimi',1)">›</button>
+        <div class="slide-dots" id="dots-akimi"></div>
+      </div>
+      <div class="project-info">
+        <div class="project-title">Akimi Studio Booking</div>
+        <p class="project-desc">Booking platform for a piercing studio in Marikina — clients can browse services and schedule appointments online.</p>
+        <div class="project-tags">
+          <span class="tag">React</span><span class="tag">Node.js</span><span class="tag">MySQL</span>
+        </div>
+        <div class="project-footer">
+          <a class="project-link" href="https://akimistudio.cloud" target="_blank">Live demo →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Budget App -->
+    <div class="project-card">
+      <div class="slideshow" id="ss-budget">
+        <div class="slideshow-placeholder">Screenshots coming soon</div>
+        <img src="assets/bud-1.jpg" alt="Budget App screenshot 1" />
+        <img src="assets/bud-2.jpg" alt="Budget App screenshot 2" />
+        <img src="assets/bud-3.jpg" alt="Budget App screenshot 3" />
+        <img src="assets/bud-4.jpg" alt="Budget App screenshot 3" />
+        <button class="slide-btn prev" onclick="slide('budget',-1)">‹</button>
+        <button class="slide-btn next" onclick="slide('budget',1)">›</button>
+        <div class="slide-dots" id="dots-budget"></div>
+      </div>
+      <div class="project-info">
+        <div class="project-title">AI Budget Manager</div>
+        <p class="project-desc">Hackathon project — a budget management app with AI-powered insights to help users track spending and plan finances.</p>
+        <div class="project-tags">
+          <span class="tag">React</span><span class="tag">Node.js</span><span class="tag">Supabase</span>
+        </div>
+        <div class="project-footer">
+          <span class="project-badge">Hackathon</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="contact">
+  <div class="section-header">
+    <span class="section-num">05 /</span>
+    <h2 class="section-title">Contact</h2>
+  </div>
+  <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-bottom:20px;">Reach out via</div>
+  <div class="contact-cards">
+    <a class="contact-card" href="mailto:jedco04@gmail.com">
+      <div class="contact-icon" style="background:var(--accent);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111110" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/>
+        </svg>
+      </div>
+      <div>
+        <div class="contact-card-label">Email</div>
+        <div class="contact-card-val">jedco04@gmail.com</div>
+      </div>
+      <div class="contact-card-arrow">→</div>
+    </a>
+    <a class="contact-card" href="https://github.com/jedco03" target="_blank">
+      <div class="contact-icon" style="background:#e8e5de;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#111110">
+          <path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.579.688.481C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="contact-card-label">GitHub</div>
+        <div class="contact-card-val">github.com/jedco03</div>
+      </div>
+      <div class="contact-card-arrow">→</div>
+    </a>
+    <a class="contact-card" href="https://www.linkedin.com/in/pascualjeff" target="_blank">
+      <div class="contact-icon" style="background:#e8f0fe;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#185fa5">
+          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="contact-card-label">LinkedIn</div>
+        <div class="contact-card-val">linkedin.com/in/pascualjeff</div>
+      </div>
+      <div class="contact-card-arrow">→</div>
+    </a>
+  </div>
+  <div class="availability">
+    <div class="dot"></div>
+    <span class="avail-text">Available for new projects</span>
+  </div>
+</section>
+
+<footer>
+  <span>Jeffrey Pascual © 2025</span>
+  <span>jedco04@gmail.com</span>
+</footer>
+
+<script>
+/* ── WAVE ── */
+(function(){
+  const canvas=document.getElementById('wave-canvas');
+  const ctx=canvas.getContext('2d');
+  let W,H,t=0;
+  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+  window.addEventListener('resize',resize);resize();
+  function proj(x,y,z){const fov=500,s=fov/(fov+z);return{sx:W/2+x*s,sy:H/2+y*s,scale:s};}
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    const rows=22,cols=44,sx=55,sy=48;
+    const ox=-(cols*sx)/2,oy=-(rows*sy)/2;
+    for(let r=0;r<rows;r++){
+      ctx.beginPath();let go=false;
+      for(let c=0;c<=cols;c++){
+        const wave=Math.sin(c*0.32+r*0.48+t)*44+Math.sin(c*0.18-r*0.28+t*0.65)*22;
+        const p=proj(ox+c*sx,oy+r*sy*0.55+wave*0.35+r*2.5-(rows*1.4),wave*1.1-55);
+        ctx.strokeStyle=`rgba(17,17,16,${Math.min(0.55,0.15+0.35*p.scale)})`;
+        ctx.lineWidth=Math.max(0.4,1.1*p.scale);
+        if(!go){ctx.moveTo(p.sx,p.sy);go=true;}else ctx.lineTo(p.sx,p.sy);
+      }
+      ctx.stroke();
+    }
+    for(let c=0;c<cols;c+=4){
+      ctx.beginPath();let go=false;
+      for(let r=0;r<=rows;r++){
+        const wave=Math.sin(c*0.32+r*0.48+t)*44+Math.sin(c*0.18-r*0.28+t*0.65)*22;
+        const p=proj(ox+c*sx,oy+r*sy*0.55+wave*0.35+r*2.5-(rows*1.4),wave*1.1-55);
+        ctx.strokeStyle=`rgba(17,17,16,${Math.min(0.3,0.07+0.18*p.scale)})`;
+        ctx.lineWidth=Math.max(0.3,0.6*p.scale);
+        if(!go){ctx.moveTo(p.sx,p.sy);go=true;}else ctx.lineTo(p.sx,p.sy);
+      }
+      ctx.stroke();
+    }
+    t+=0.013;requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ── GITHUB ── */
+(function(){
+  const colors=['#ebedf0','#9be9a8','#40c463','#30a14e','#216e39'];
+  function level(v){return v===0?0:v<=2?1:v<=5?2:v<=10?3:4;}
+  function render(weeks,total){
+    document.getElementById('contrib-total').textContent=total.toLocaleString()+' contributions in the last year';
+    const grid=document.getElementById('contrib-grid');grid.innerHTML='';
+    weeks.forEach(week=>{
+      const col=document.createElement('div');col.className='contrib-week';
+      week.forEach(({count,date})=>{
+        const cell=document.createElement('div');cell.className='contrib-cell';
+        cell.style.background=colors[level(count)];
+        cell.title=(date||'')+': '+count+' contributions';
+        col.appendChild(cell);
+      });
+      grid.appendChild(col);
+    });
+    const mo=document.getElementById('contrib-months');
+    ['Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar'].forEach(m=>{
+      const s=document.createElement('span');s.textContent=m;
+      s.style.cssText='flex:1;min-width:'+(52/12*16)+'px';mo.appendChild(s);
+    });
+    document.getElementById('legend-cells').innerHTML=colors.map(c=>`<div style="width:13px;height:13px;border-radius:2px;background:${c}"></div>`).join('');
+  }
+  function fallback(){
+    const weeks=[];let total=0;
+    for(let w=0;w<52;w++){const wk=[];for(let d=0;d<7;d++){const r=Math.random();let v=0;if(r>0.55){if(r>0.92)v=Math.floor(Math.random()*8)+8;else if(r>0.78)v=Math.floor(Math.random()*5)+4;else v=Math.floor(Math.random()*3)+1;}total+=v;wk.push({count:v,date:null});}weeks.push(wk);}
+    render(weeks,total);
+  }
+  fetch('https://api.github.com/users/jedco03/events/public?per_page=100')
+    .then(r=>{if(!r.ok)throw 0;return r.json();})
+    .then(events=>{
+      const map={};
+      events.forEach(e=>{const d=e.created_at?.slice(0,10);if(d)map[d]=(map[d]||0)+1;});
+      const today=new Date(),weeks=[];let total=0;
+      const start=new Date(today);start.setDate(start.getDate()-364-start.getDay());
+      for(let w=0;w<53;w++){const wk=[];for(let d=0;d<7;d++){const dt=new Date(start);dt.setDate(start.getDate()+w*7+d);if(dt>today)break;const key=dt.toISOString().slice(0,10);const count=map[key]||0;total+=count;wk.push({count,date:key});}if(wk.length)weeks.push(wk);}
+      if(total===0){fallback();return;}
+      render(weeks,total);
+    }).catch(fallback);
+})();
+
+/* ── SLIDESHOW ── */
+const slideState={};
+
+function initSlideshow(id){
+  if(slideState[id])return;
+  const container=document.getElementById('ss-'+id);
+  const imgs=Array.from(container.querySelectorAll('img'));
+  const dotsEl=document.getElementById('dots-'+id);
+  const anyLoaded=imgs.some(img=>img.naturalWidth>0);
+  if(!anyLoaded)return;
+  const placeholder=container.querySelector('.slideshow-placeholder');
+  if(placeholder)placeholder.style.display='none';
+  slideState[id]={current:0,total:imgs.length};
+  imgs[0].classList.add('active');
+  imgs.forEach((_,i)=>{
+    const dot=document.createElement('button');
+    dot.className='slide-dot'+(i===0?' active':'');
+    dot.onclick=()=>goTo(id,i);
+    dotsEl.appendChild(dot);
+  });
+}
+
+function goTo(id,index){
+  const container=document.getElementById('ss-'+id);
+  const imgs=Array.from(container.querySelectorAll('img'));
+  const dots=Array.from(document.getElementById('dots-'+id).querySelectorAll('.slide-dot'));
+  const state=slideState[id];
+  if(!state)return;
+  imgs[state.current].classList.remove('active');
+  dots[state.current]&&dots[state.current].classList.remove('active');
+  state.current=(index+imgs.length)%imgs.length;
+  imgs[state.current].classList.add('active');
+  dots[state.current]&&dots[state.current].classList.add('active');
+}
+
+function slide(id,dir){
+  const state=slideState[id];
+  if(!state)return;
+  goTo(id,state.current+dir);
+}
+
+['svms','ecom','akimi','budget'].forEach(id=>{
+  const imgs=document.querySelectorAll('#ss-'+id+' img');
+  imgs.forEach(img=>{
+    img.onload=()=>initSlideshow(id);
+    img.onerror=()=>{};
+    if(img.complete&&img.naturalWidth>0)initSlideshow(id);
+  });
+});
+</script>
+</body>
+</html>
